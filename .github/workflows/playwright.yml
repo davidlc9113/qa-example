@@ -23,6 +23,13 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
+    - name: Test Report
+      uses: dorny/test-reporter@v2
+      if: ${{ !cancelled() }}
+      with:
+        name: JUnit Report
+        path: results.xml
+        reporter: java-junit
     - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
