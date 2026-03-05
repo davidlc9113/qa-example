@@ -1,7 +1,7 @@
 name: Playwright Tests
 on:
   schedule:
-    - cron: "30 8 * * *"
+    - cron: "30 8 * * 1"
   push: 
     paths:
       - 'tests/**'
@@ -21,8 +21,20 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
+    - name: Run all Playwright tests
+      if: github.event_name != 'pull_request'
       run: npx playwright test
+    - name: Get changed files
+      if: github.event_name == 'pull_request'
+      id: changed-files
+      uses: tj-actions/changed-files@v47
+      with:
+        files: tests/**.spec.ts
+    - name: Run changed Playwright tests
+      if: github.event_name == 'pull_request'
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      run: npx playwright test ${ALL_CHANGED_FILES}
     - name: Test Report
       uses: dorny/test-reporter@v2
       if: ${{ !cancelled() }}

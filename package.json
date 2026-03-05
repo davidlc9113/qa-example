@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test --project 'Mobile Chrome'",
+    "test": "sh -c 'playwright test $@ --project \"Mobile Chrome\"' --",
     "test:all": "playwright test",
     "check": "biome check --write"
   },
