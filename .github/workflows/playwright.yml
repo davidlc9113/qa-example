@@ -21,7 +21,7 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
+    - name: Run all Playwright tests
       if: github.event_name != 'pull_request'
       run: npx playwright test
     - name: Get changed files
@@ -30,7 +30,7 @@ jobs:
       uses: tj-actions/changed-files@v47
       with:
         files: tests/**.spec.ts
-    - name: Run Playwright tests
+    - name: Run changed Playwright tests
       if: github.event_name == 'pull_request'
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
